@@ -14,6 +14,8 @@ import OtpPage from "./pages/OtpPage";
 import { Toaster } from "react-hot-toast";
 import Contact from "./pages/Contact";
 import ContactList from "./pages/Dashboard/ContactList";
+import SubscribeList from "./pages/Dashboard/subsList";
+import UserList from "./pages/Dashboard/UserList";
 function App() {
   return (
     <>
@@ -32,6 +34,8 @@ function App() {
           <Route path="/otp" element={<OtpPage />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/contactList" element={<ContactList />} />
+          <Route path="/subscribeList" element={<SubscribeList />} />
+          <Route path="/userList" element={<UserList />} />
         </Routes>
 
         <Toaster position="bottom-center" />

@@ -1,29 +1,90 @@
 const mongoose = require("mongoose");
 
-const commentSchema = new mongoose.Schema(
-  {
-    user: { type: Schema.Types.ObjectId, ref: "User", required: true },
-    desc: { type: String, required: true },
-    post: { type: Schema.Types.ObjectId, ref: "Blog", required: true },
-    check: { type: Boolean, default: false },
-    parent: {
-      type: Schema.Types.ObjectId,
-      ref: "Comment",
-      default: null,
-    },
-    replyOnUser: {
-      type: Schema.Types.ObjectId,
-      ref: "User",
-      default: null,
-    },
-  },
-  { timestamps: true, toJSON: { virtuals: true } }
-);
+// const commentSchema = new mongoose.Schema(
+//   {
+//     blogId: {
+//       type: String,
+//       required: true,
+//     },
+//     commentTex: {
+//       type: String,
+//       required: true,
+//     },
+//     userName: {
+//       type: String,
+//       required: true,
+//     },
+//     userImage: {
+//       type: String,
+//       required: true,
+//     },
+//     relpyComment: [
+//       {
+//         relpyName: {
+//           type: String,
+//           required: true,
+//         },
+//         relpyImage: {
+//           type: String,
+//           required: true,
+//         },
+//         relpyTime: {
+//           type: String,
+//           required: true,
+//         },
+//         relpyText: {
+//           type: String,
+//           required: true,
+//         },
+//       },
+//     ],
+//   },
+//   { timestamps: true }
+// );
 
-commentSchema.virtual("replies", {
-  ref: "Comment",
-  localField: "_id",
-  foreignField: "parent",
-});
+// module.exports = mongoose.model("Comment", commentSchema);
+
+const { Schema } = mongoose;
+
+const commentSchema = new Schema(
+  {
+    _Id: {
+      type: Schema.Types.ObjectId,
+      ref: "blogs",
+      required: true,
+    },
+    username: {
+      type: String,
+      required: true,
+    },
+    comment: {
+      type: String,
+      required: true,
+    },
+    replies: [
+      {
+        username: {
+          type: String,
+          required: true,
+        },
+        commentId: {
+          type: Schema.Types.ObjectId,
+          required: true,
+        },
+        reply: {
+          type: String,
+          required: true,
+        },
+        createdAt: {
+          type: Date,
+          default: Date.now,
+        },
+      },
+    ],
+  },
+  {
+    timestamps: true,
+  }
+);
 
 module.exports = mongoose.model("Comment", commentSchema);

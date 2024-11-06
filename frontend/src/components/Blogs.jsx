@@ -7,7 +7,8 @@ import Slider from "react-slick";
 import BlogStore from "../store/BlogStore";
 import { FaChevronLeft, FaAngleRight } from "react-icons/fa6";
 import { Link } from "react-router-dom";
-import ReactPaginate from "react-paginate";
+
+import axios from "axios";
 
 // Custom Next Arrow
 const NextArrow = ({ onClick }) => (
@@ -92,73 +93,80 @@ const Blogs = () => {
       },
     ],
   };
+
+  ///////////////////////
+
+  const [blogs, setBlogs] = useState([]);
+  const [visibleCount, setVisibleCount] = useState(3);
+
+  useEffect(() => {
+    const fetchBlogs = async () => {
+      try {
+        const response = await axios.get("/api/v1/blogs");
+        setBlogs(response.data.blogs);
+      } catch (error) {
+        console.error("Error fetching blogs:", error);
+      }
+    };
+
+    fetchBlogs();
+  }, []);
+
+  const loadMore = () => {
+    setVisibleCount((prevCount) => prevCount + 3);
+  };
+
   return (
     <div className="dark:text-white dark:bg-black">
       <div className="px-4 sm:px-8 pt-[70px]">
         <div className="flex flex-col md:flex-row gap-4">
           {/* Left Column */}
           <div className="md:w-2/3 w-full">
-            {Array.isArray(BlogList) && BlogList.length > 0 ? (
-              BlogList.map((data) => (
-                <div key={data._id} className="mb-8">
-                  <div className="flex flex-col md:flex-row gap-3">
-                    <div className="relative w-full md:w-1/2 pr-0 md:pr-6">
-                      <Link to={`/details/${data["_id"]}`}>
-                        <img
-                          src={data.image || "https://default-image-url.com"}
-                          alt="Main Blog Image"
-                          className="h-full w-full object-cover rounded-2xl" // Ensure image takes full height and width of the container
-                        />
-                      </Link>
-                      <p className="absolute top-0 left-0 bg-white text-black text-xl font-bold px-2 py-1 rounded-lg m-4 uppercase">
-                        {getCategoryName(data.categoryID)}
-                      </p>
-                    </div>
-                    <div className="py-4 md:w-1/2 w-full">
-                      <p>
-                        {data.author} on {data.date}
-                      </p>
-                      <h1 className="text-xl font-bold py-4">{data.title}</h1>
-                      <p>{data.shortDes}</p>
-                      <p className="text-gray-500 text-sm mt-2">
-                        Created on: {formatDate(data.createdAt)} | Updated on:{" "}
-                        {formatDate(data.updatedAt)}
-                      </p>
-                      <Link to={`/details/${data["_id"]}`}>
-                        <button className="bg-gradient-to-r from-blue-400 to-blue-700 p-2 rounded-md mt-4 text-white text-md px-3 cursor-pointer font-bold shadow-lg shadow-blue-100">
-                          Discover More
-                        </button>
-                      </Link>
-                    </div>
+            {blogs.slice(0, visibleCount).map((blog) => (
+              <div className="mb-8" key={blog._id}>
+                <div className="flex flex-col md:flex-row gap-3">
+                  <div className="relative w-full md:w-1/2 pr-0 md:pr-6">
+                    <Link to={`/details/${blog["_id"]}`}>
+                      <img
+                        src={blog.image}
+                        alt={blog.title}
+                        className="h-full w-full object-cover rounded-2xl"
+                      />
+                    </Link>
+                    <p className="absolute top-0 left-0 bg-white text-black text-xl font-bold px-2 py-1 rounded-lg m-4 uppercase">
+                      {getCategoryName(blog.categoryID)}
+                    </p>
+                  </div>
+                  <div className="py-4 md:w-1/2 w-full">
+                    <p>
+                      {blog.author} on {blog.date}
+                    </p>
+                    <h1 className="text-xl font-bold py-4">{blog.title}</h1>
+                    <p>{blog.shortDes}</p>
+                    <p className="text-gray-500 text-sm mt-2">
+                      Created on: {formatDate(blog.createdAt)} | Updated on:{" "}
+                      {formatDate(blog.updatedAt)}
+                    </p>
+                    <Link to={`/details/${blog["_id"]}`}>
+                      <button className="bg-gradient-to-r from-blue-400 to-blue-700 p-2 rounded-md mt-4 text-white text-md px-3 cursor-pointer font-bold shadow-lg shadow-blue-100">
+                        Discover More
+                      </button>
+                    </Link>
                   </div>
                 </div>
-              ))
-            ) : (
-              <div className="flex justify-center items-center p-4">
-                <p>No blogs available</p>
               </div>
-            )}
+            ))}
 
-            <div>
-              <ReactPaginate
-                previousLabel="<"
-                nextLabel=">"
-                pageClassName="page-item"
-                pageLinkClassName="px-3 py-2 border border-gray-300 rounded-full hover:bg-gray-200 text-gray-700"
-                previousClassName="page-item"
-                previousLinkClassName="px-3 py-2 border border-gray-300 rounded-full hover:bg-gray-200 text-gray-700"
-                nextClassName="page-item"
-                nextLinkClassName="px-3 py-2 border border-gray-300 rounded-full hover:bg-gray-200 text-gray-700"
-                breakLabel="..."
-                breakClassName="page-item"
-                breakLinkClassName="px-3 py-2 text-gray-700"
-                pageCount={Total / perPageKey}
-                marginPagesDisplayed={2}
-                pageRangeDisplayed={5}
-                onPageChange={handlePageClick}
-                containerClassName="flex justify-center space-x-2 mt-4"
-                activeClassName="bg-blue-500 text-white"
-              />
+            <div className="text-center py-5">
+              {visibleCount < blogs.length && (
+                <button
+                  onClick={loadMore}
+                  className="bg-gradient-to-r from-blue-500 to-green-300 hover:from-blue-700 hover:to-green-700 transition-all duration-600 text-white px-5 py-2 rounded-full font-bold text-xl mt-5 mb-6"
+                >
+                  {" "}
+                  Load More
+                </button>
+              )}
             </div>
           </div>
 

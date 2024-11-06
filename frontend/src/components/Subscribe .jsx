@@ -11,12 +11,12 @@ const Subscribe = () => {
 
   const SaveData = async () => {
     if (IsEmpty(subscribeFormData.email)) {
-      ErrorToast("email is required");
+      ErrorToast("Email is required");
     } else {
       const result = await CreateSubscribeRequest(subscribeFormData);
       console.log(result);
 
-      if (result.message === "subscribe form submitted successfully") {
+      if (result.message === "Subscribe submitted successfully") {
         SuccessToast("Data saved successfully");
         navigate("/");
       } else {
@@ -37,7 +37,7 @@ const Subscribe = () => {
               Don't miss anything. Get all the latest posts delivered straight
               to your inbox!
             </p>
-            <form className="w-full">
+            <form className="w-full" onSubmit={(e) => e.preventDefault()}>
               <div className="py-5">
                 <div className="relative">
                   <input
@@ -51,7 +51,11 @@ const Subscribe = () => {
                     placeholder="Enter your email"
                     className="w-full px-4 py-3 pr-24 rounded-lg border-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
-                  <button className="absolute right-0 top-0 mt-1.5 mr-2 px-6 py-2 bg-gradient-to-r from-blue-400 to-blue-700 text-white font-semibold rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                  <button
+                    type="button"
+                    onClick={SaveData}
+                    className="absolute right-0 top-0 mt-1.5 mr-2 px-6 py-2 bg-gradient-to-r from-blue-400 to-blue-700 text-white font-semibold rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  >
                     Subscribe
                   </button>
                 </div>

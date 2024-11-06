@@ -5,6 +5,7 @@ import Blogs from "../components/Blogs";
 import Subscribe from "../components/Subscribe ";
 import BlogStore from "../store/BlogStore";
 import Layout from "../components/layout/layout";
+import LatestArticles from "../components/LatestArticles";
 
 const Home = () => {
   const { CategoryListRequest, BlogListRequest } = BlogStore();
@@ -20,6 +21,7 @@ const Home = () => {
       <Hero />
       <Category />
       <Blogs />
+      <LatestArticles />
       <Subscribe />
     </Layout>
   );

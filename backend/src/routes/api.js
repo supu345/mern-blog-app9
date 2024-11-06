@@ -23,6 +23,12 @@ router.get("/VerifyLogin/:email/:otp", UserController.VerifyLogin);
 router.get("/UserLogout", AuthVerification, UserController.UserLogout);
 router.post("/createContact", UserController.CreateContact);
 router.get("/contactList", UserController.ContactList);
-
+router.post("/deleteContact/:id", UserController.DeleteContact);
 router.post("/createSubscribe", UserController.CreateSubscribe);
+router.get("/subscribeList", UserController.SubscribeList);
+router.post("/deleteSubscribe/:id", UserController.DeleteSubscribe);
+router.get("/userList", UserController.UserList);
+router.post("/deleteUser/:id", UserController.DeleteUser);
+router.post("/createComments", UserController.CreateComments);
+
 module.exports = router;

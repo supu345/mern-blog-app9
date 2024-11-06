@@ -10,6 +10,7 @@ import BlogStore from "../store/BlogStore";
 import Subscribe from "../components/Subscribe ";
 import { useParams } from "react-router-dom";
 import parse from "html-react-parser";
+import Comments from "../components/Comments";
 
 // Custom Next Arrow
 const NextArrow = ({ onClick }) => (
@@ -126,6 +127,10 @@ const BlogDetails = () => {
               ) : (
                 <p>Loading...</p>
               )}
+
+              <div>
+                <Comments />
+              </div>
             </div>
 
             <div className="ml-[40px] w-[500px]">
@@ -186,23 +191,25 @@ const BlogDetails = () => {
           </div>
 
           <div className="grid grid-cols-3 gap-6 mt-[60px] px-6">
-            {[...Array(3)].map((_, index) => (
-              <div key={index}>
-                <img
-                  src="https://images.pexels.com/photos/2116721/pexels-photo-2116721.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
-                  className="h-[200px] w-[400px] rounded-xl"
-                  alt="Related Post"
-                />
-                <p className="pt-3">Ethan Caldwell on April 28, 2024</p>
-                <p className="text-xl font-bold">
-                  How AI is Revolutionizing Business Management in 2024
-                </p>
-                <p className="pt-3">
-                  Learn how AI is transforming business management by optimizing
-                  decision-making and improving operational efficiency.
-                </p>
+            {Array.isArray(BlogList) && BlogList.length > 0 ? (
+              BlogList.slice(0, 3).map((data) => (
+                <div key={data.id}>
+                  <img
+                    src={data.image || "https://default-image-url.com"}
+                    className="h-[200px] w-[400px] rounded-xl"
+                    alt="Related Post"
+                  />
+                  <p className="pt-3">{data.author}</p>
+
+                  <p className="text-xl font-bold">{data.title}</p>
+                  <p className="text-xl ">{data.shortDes}</p>
+                </div>
+              ))
+            ) : (
+              <div className="flex justify-center items-center p-4">
+                <p>No blogs available</p>
               </div>
-            ))}
+            )}
           </div>
 
           <Subscribe />

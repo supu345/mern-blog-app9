@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BsArrowLeftShort } from "react-icons/bs";
 import { AiFillEnvironment } from "react-icons/ai";
 import { MdDashboard } from "react-icons/md";
@@ -11,6 +11,8 @@ import { IoMdSettings } from "react-icons/io";
 import { IoLogOut } from "react-icons/io5";
 import { IoMdContacts } from "react-icons/io";
 import { MdUnsubscribe } from "react-icons/md";
+import UserStore from "../../store/UserStore";
+import UserSubmitButton from "../UserSubmitButton";
 const DashboardLayout = (props) => {
   const [open, setOpen] = useState(true);
   const Menu = [
@@ -24,6 +26,17 @@ const DashboardLayout = (props) => {
     { title: "Logout", icon: <IoLogOut /> },
   ];
 
+  const { isLogin, UserLogoutRequest } = UserStore();
+
+  useEffect(() => {
+    console.log("Is user logged in:", isLogin());
+  }, [isLogin]);
+  const onLogout = async () => {
+    await UserLogoutRequest();
+    sessionStorage.clear();
+    localStorage.clear();
+    window.location.href = "/";
+  };
   return (
     <div className="flex min-h-screen p-2 ">
       <div
@@ -89,7 +102,7 @@ const DashboardLayout = (props) => {
             </span>
             <a href="/createBlog">
               <span
-                className={`text-gray-900 text-sm flex items-center gap-x-1 cursor-pointer p-2 -pt-3 hover:bg-gray-500 rounded-md  pb-5  ${
+                className={`text-gray-900 text-sm flex items-center gap-x-1 cursor-pointer p-2 -pt-3 hover:bg-blue-500 rounded-md  pb-2  ${
                   !open && "hidden"
                 }`}
               >
@@ -103,7 +116,7 @@ const DashboardLayout = (props) => {
             </span>
             <a href="/blogList">
               <span
-                className={`text-gray-900 text-sm flex items-center gap-x-1 cursor-pointer p-2 -pt-3 hover:bg-gray-500 rounded-md  pb-5  ${
+                className={`text-gray-900 text-sm flex items-center gap-x-1 cursor-pointer p-2 -pt-3 hover:bg-blue-500 rounded-md  pb-2  ${
                   !open && "hidden"
                 }`}
               >
@@ -117,7 +130,7 @@ const DashboardLayout = (props) => {
             </span>
             <a href="/userList">
               <span
-                className={`text-gray-900 text-sm flex items-center gap-x-1 cursor-pointer p-2 -pt-3 hover:bg-gray-500 rounded-md  pb-5  ${
+                className={`text-gray-900 text-sm flex items-center gap-x-1 cursor-pointer p-2 -pt-3 hover:bg-blue-500 rounded-md  pb-2  ${
                   !open && "hidden"
                 }`}
               >
@@ -131,7 +144,7 @@ const DashboardLayout = (props) => {
             </span>
             <a href="/contactList">
               <span
-                className={`text-gray-900 text-sm flex items-center gap-x-1 cursor-pointer p-2 -pt-3 hover:bg-gray-500 rounded-md  pb-5  ${
+                className={`text-gray-900 text-sm flex items-center gap-x-1 cursor-pointer p-2 -pt-3 hover:bg-blue-500 rounded-md  pb-2  ${
                   !open && "hidden"
                 }`}
               >
@@ -143,9 +156,9 @@ const DashboardLayout = (props) => {
             <span className="text-2xl text-black pl-2 pt-1 ">
               <MdUnsubscribe />
             </span>
-            <a href="/userList">
+            <a href="/subscribeList">
               <span
-                className={`text-gray-900 text-sm flex items-center gap-x-1 cursor-pointer p-2 -pt-3 hover:bg-gray-500 rounded-md  pb-5  ${
+                className={`text-gray-900 text-sm flex items-center gap-x-1 cursor-pointer p-2 -pt-3 hover:bg-blue-500 rounded-md  pb-2  ${
                   !open && "hidden"
                 }`}
               >
@@ -159,7 +172,7 @@ const DashboardLayout = (props) => {
             </span>
             <a href="/createProduct">
               <span
-                className={`text-gray-900 text-sm flex items-center gap-x-1 cursor-pointer p-2 -pt-3 hover:bg-gray-500 rounded-md  pb-5  ${
+                className={`text-gray-900 text-sm flex items-center gap-x-1 cursor-pointer p-2 -pt-3 hover:bg-blue-500 rounded-md  pb-2  ${
                   !open && "hidden"
                 }`}
               >
@@ -171,15 +184,14 @@ const DashboardLayout = (props) => {
             <span className="text-2xl text-black pl-2 pt-1 ">
               <IoLogOut />
             </span>
-            <a href="/createProduct">
-              <span
-                className={`text-gray-900 text-sm flex items-center gap-x-1 cursor-pointer p-2 -pt-3 hover:bg-gray-500 rounded-md  pb-5  ${
-                  !open && "hidden"
-                }`}
-              >
-                Logout
-              </span>
-            </a>
+
+            <span
+              className={`text-gray-900 text-sm flex items-center gap-x-1 cursor-pointer p-2 -pt-3 hover:bg-blue-500 rounded-md  pb-2  ${
+                !open && "hidden"
+              }`}
+            >
+              <p onClick={onLogout}> Logout</p>
+            </span>
           </li>
         </ul>
       </div>

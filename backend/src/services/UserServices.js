@@ -4,6 +4,7 @@ const ProfileModel = require("../models/ProfileModel");
 const ContactModel = require("../models/ContactModel");
 const { EncodeToken } = require("../utility/TokenHelper");
 const SubscribeModel = require("../models/SubscribeModel");
+const CommentModel = require("../models/CommentModel");
 
 // const UserOTPService = async (req) => {
 //   try {
@@ -141,6 +142,26 @@ const VerifyOTPService = async (req) => {
     };
   }
 };
+//read user
+const UserListService = async () => {
+  try {
+    let data = await UserModel.find();
+    return { status: "success", data: data };
+  } catch (e) {
+    return { status: "fail", data: e }.toString();
+  }
+};
+
+// D=Delete
+const DeleteUserService = async (req, res) => {
+  try {
+    let id = req.params.id;
+    let result = await UserModel.deleteOne({ _id: id });
+    return { status: "success", data: result };
+  } catch (e) {
+    return { status: "fail", data: e.toString() };
+  }
+};
 
 const SaveProfileService = async (req) => {
   try {
@@ -215,6 +236,57 @@ const ContactListService = async () => {
     return { status: "fail", data: e }.toString();
   }
 };
+
+// D=Delete
+const DeleteContactService = async (req, res) => {
+  try {
+    let id = req.params.id;
+    let result = await ContactModel.deleteOne({ _id: id });
+    return { status: "success", data: result };
+  } catch (e) {
+    return { status: "fail", data: e.toString() };
+  }
+};
+
+const SubscribeListService = async () => {
+  try {
+    let data = await SubscribeModel.find();
+    return { status: "success", data: data };
+  } catch (e) {
+    return { status: "fail", data: e }.toString();
+  }
+};
+
+// D=Delete
+const DeleteSubscribeService = async (req, res) => {
+  try {
+    let id = req.params.id;
+    let result = await SubscribeModel.deleteOne({ _id: id });
+    return { status: "success", data: result };
+  } catch (e) {
+    return { status: "fail", data: e.toString() };
+  }
+};
+
+const UserCommetsServices = async (
+  blogId,
+  commentText,
+  userName,
+  userImage
+) => {
+  try {
+    await CommentModel.create({
+      blogId,
+      commentText,
+      userName,
+      userImage,
+    });
+    return { status: "success", message: "Comment created successfully" };
+  } catch (e) {
+    return { status: "fail", error: e.message };
+  }
+};
+
 module.exports = {
   UserOTPService,
   VerifyOTPService,
@@ -223,4 +295,10 @@ module.exports = {
   ReadProfileService,
   CreateSubscribeService,
   ContactListService,
+  DeleteContactService,
+  SubscribeListService,
+  DeleteSubscribeService,
+  UserListService,
+  DeleteUserService,
+  UserCommetsServices,
 };

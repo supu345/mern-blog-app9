@@ -12,6 +12,7 @@ const cookieParser = require("cookie-parser");
 const path = require("path");
 const dotenv = require("dotenv");
 const dbConnection = require("./database/dbConnection.js");
+const BlogModel = require("./src/models/BlogModel.js");
 dotenv.config({ path: "./.env" });
 
 const app = express();
@@ -34,6 +35,18 @@ app.use("/api/auth", authRoutes);
 
 dbConnection();
 
+app.get("/api/v1/blogs", async (req, res) => {
+  const { page, limit } = req.query;
+  try {
+    const skip = (page - 1) * limit; // Calculate how many entries to skip
+    const blogs = await BlogModel.find().skip(skip).limit(parseInt(limit));
+    const totalCount = await BlogModel.countDocuments(); // Total count of documents
+    res.json({ success: true, blogs, totalCount });
+  } catch (error) {
+    console.error("Error fetching blogs:", error);
+    res.status(500).json({ success: false, message: "Error fetching blogs" });
+  }
+});
 // app.use(express.static(path.join(__dirname, "/frontend/build")));
 // app.get("*", (req, res) => {
 //   res.sendFile(path.join(__dirname, "/frontend/build/index.html"));

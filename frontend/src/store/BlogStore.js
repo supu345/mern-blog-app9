@@ -36,18 +36,16 @@ const BlogStore = create((set) => ({
     }
   },
 
-  // BlogListRequest: async (page, limit) => {
-  //   try {
-  //     const res = await axios.get(
-  //       `http://localhost:5040/api/blogs?page=${page}&limit=${limit}`
-  //     );
-  //     console.log("API Response:", res.data); // Log the response
-  //     return res.data;
-  //   } catch (error) {
-  //     console.error("API Request Error:", error);
-  //     return { success: false, blogs: [], totalCount: 0 };
-  //   }
-  // },
+  BlogsListRequest: async (page, limit) => {
+    try {
+      const res = await axios.get(`/api/v1/blogs?page=${page}&limit=${limit}`);
+      console.log("API Response:", res.data); // Log the response
+      return res.data;
+    } catch (error) {
+      console.error("API Request Error:", error);
+      return { success: false, blogs: [], totalCount: 0 };
+    }
+  },
   DeleteBlogRequest: async (id) => {
     try {
       let res = await axios.post(`/api/v1/deleteBlog/${id}`);

@@ -6,6 +6,12 @@ const {
   CreateContactService,
   CreateSubscribeService,
   ContactListService,
+  DeleteContactService,
+  SubscribeListService,
+  DeleteSubscribeService,
+  UserListService,
+  DeleteUserService,
+  UserCommetsServices,
 } = require("../services/UserServices");
 
 exports.UserOTP = async (req, res) => {
@@ -92,5 +98,59 @@ exports.CreateSubscribe = async (req, res) => {
 
 exports.ContactList = async (req, res) => {
   let result = await ContactListService();
+  return res.status(200).json(result);
+};
+
+//delete blog
+exports.DeleteContact = async (req, res) => {
+  try {
+    let result = await DeleteContactService(req, res);
+    return res.status(200).json(result);
+  } catch (error) {
+    console.error("Error in Delete Contact controller:", error);
+    return res
+      .status(500)
+      .json({ status: "error", message: "Internal Server Error" });
+  }
+};
+
+exports.SubscribeList = async (req, res) => {
+  let result = await SubscribeListService();
+  return res.status(200).json(result);
+};
+//delete Subscribe
+exports.DeleteSubscribe = async (req, res) => {
+  try {
+    let result = await DeleteSubscribeService(req, res);
+    return res.status(200).json(result);
+  } catch (error) {
+    console.error("Error in Delete Subscribe controller:", error);
+    return res
+      .status(500)
+      .json({ status: "error", message: "Internal Server Error" });
+  }
+};
+
+exports.UserList = async (req, res) => {
+  let result = await UserListService();
+  return res.status(200).json(result);
+};
+
+//delete Subscribe
+exports.DeleteUser = async (req, res) => {
+  try {
+    let result = await DeleteUserService(req, res);
+
+    return res.status(200).json(result);
+  } catch (error) {
+    console.error("Error in Delete user controller:", error);
+    return res
+      .status(500)
+      .json({ status: "error", message: "Internal Server Error" });
+  }
+};
+
+exports.CreateComments = async (req, res) => {
+  let result = await UserCommetsServices(req);
   return res.status(200).json(result);
 };

@@ -39,16 +39,16 @@ export const DropdownLinks = [
     name: "About us",
     link: "/about",
   },
-  {
-    id: 2,
-    name: "Blog",
-    link: "/#",
-  },
-  {
-    id: 3,
-    name: "Single Blog",
-    link: "/details/:id",
-  },
+  // {
+  //   id: 2,
+  //   name: "Blog",
+  //   link: "/#",
+  // },
+  // {
+  //   id: 3,
+  //   name: "Single Blog",
+  //   link: "/details/:id",
+  // },
 
   {
     id: 4,

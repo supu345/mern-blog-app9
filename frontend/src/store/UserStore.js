@@ -180,6 +180,76 @@ const UserStore = create((set) => ({
       console.error("Error fetching contact list:", error);
     }
   },
+
+  DeleteContactRequest: async (id) => {
+    try {
+      let res = await axios.post(`/api/v1/deleteContact/${id}`);
+      if (res.data["status"] === "success") {
+        return { status: "success", data: res.data["data"] };
+      } else {
+        return { status: "fail", data: res.data["message"] };
+      }
+    } catch (error) {
+      console.error("Error deleting blog:", error);
+      return { status: "fail", data: error.toString() };
+    }
+  },
+
+  SubscribeList: null,
+  SubscribeListRequest: async () => {
+    try {
+      const response = await axios.get("/api/v1/subscribeList");
+      if (response.data.status === "success") {
+        set({ SubscribeList: response.data.data });
+      } else {
+        console.error("Failed to fetch Subscribe list");
+      }
+    } catch (error) {
+      console.error("Error fetching Subscribe list:", error);
+    }
+  },
+
+  DeleteSubscribeRequest: async (id) => {
+    try {
+      let res = await axios.post(`/api/v1/deleteSubscribe/${id}`);
+      if (res.data["status"] === "success") {
+        return { status: "success", data: res.data["data"] };
+      } else {
+        return { status: "fail", data: res.data["message"] };
+      }
+    } catch (error) {
+      console.error("Error deleting subscribe:", error);
+      return { status: "fail", data: error.toString() };
+    }
+  },
+
+  UserList: null,
+  UserListRequest: async () => {
+    try {
+      const response = await axios.get("/api/v1/userList");
+      if (response.data.status === "success") {
+        set({ UserList: response.data.data });
+      } else {
+        console.error("Failed to fetch UserList list");
+      }
+    } catch (error) {
+      console.error("Error fetching UserList list:", error);
+    }
+  },
+
+  DeleteUserRequest: async (id) => {
+    try {
+      let res = await axios.post(`/api/v1/deleteUser/${id}`);
+      if (res.data["status"] === "success") {
+        return { status: "success", data: res.data["data"] };
+      } else {
+        return { status: "fail", data: res.data["message"] };
+      }
+    } catch (error) {
+      console.error("Error deleting user:", error);
+      return { status: "fail", data: error.toString() };
+    }
+  },
 }));
 
 export default UserStore;

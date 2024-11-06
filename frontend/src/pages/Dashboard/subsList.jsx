@@ -1,31 +1,32 @@
 import React, { useEffect } from "react";
 import DashboardLayout from "../../components/layout/DasboardLayout";
-import UserStore from "../../store/UserStore";
-import { AiOutlineDelete } from "react-icons/ai";
 import Swal from "sweetalert2";
 import { DeleteAlert } from "../../helper/DeleteAlert.js";
-const ContactList = () => {
-  const { ContactList, ContactListRequest } = UserStore();
+import { AiOutlineDelete } from "react-icons/ai";
+import UserStore from "../../store/UserStore.js";
+const SubscribeList = () => {
+  const { SubscribeList, SubscribeListRequest } = UserStore();
 
   useEffect(() => {
     (async () => {
-      await ContactListRequest();
+      await SubscribeListRequest();
     })();
-    console.log(ContactList);
-  }, [ContactListRequest]);
+    //   console.log(ContactList);
+  }, [SubscribeListRequest]);
 
-  const deleteBlog = async (id) => {
-    const { DeleteContactRequest, ContactListRequest } = UserStore.getState();
+  const deleteSubscribe = async (id) => {
+    const { DeleteSubscribeRequest, SubscribeListRequest } =
+      UserStore.getState();
     const result = await DeleteAlert(); // Confirm deletion with the user
 
     if (result.isConfirmed) {
       try {
-        const response = await DeleteContactRequest(id);
+        const response = await DeleteSubscribeRequest(id);
 
         if (response.status === "success") {
           await Swal.fire("Deleted!", "Your blog has been deleted.", "success");
-          console.log("Contact deleted successfully:", response.data);
-          await ContactListRequest(); // Refresh the blog list
+          console.log("Subscribe deleted successfully:", response.data);
+          await SubscribeListRequest();
         } else {
           await Swal.fire(
             "Failed!",
@@ -46,50 +47,37 @@ const ContactList = () => {
       console.log("Blog deletion was cancelled by the user.");
     }
   };
-
   return (
     <DashboardLayout>
       <div className="container mx-auto px-4">
         <h5 className="text-2xl pb-2 font-semibold hover:text-orange-500 text-center">
-          Contact List
+          Subscribe List
         </h5>
         <table className="min-w-full border border-gray-900 border-collapse">
           <thead>
             <tr className="bg-gray-300">
               <th className="p-3 border border-gray-900 text-left">Sl No</th>
-              <th className="p-3 border border-gray-900 text-left">
-                Full Name
-              </th>
+
               <th className="p-3 border border-gray-900 text-left">Email</th>
-              <th className="p-3 border border-gray-900 text-left">Subject</th>
-              <th className="p-3 border border-gray-900 text-left">Message</th>
               <th className="p-3 border border-gray-900 text-center">
                 Actions
               </th>
             </tr>
           </thead>
           <tbody>
-            {Array.isArray(ContactList) && ContactList.length > 0 ? (
-              ContactList.map((contact, index) => (
-                <tr key={contact.id || index} className="border-t">
+            {Array.isArray(SubscribeList) && SubscribeList.length > 0 ? (
+              SubscribeList.map((subscribe, index) => (
+                <tr key={subscribe.id || index} className="border-t">
                   <td className="p-3 border border-gray-900">{index + 1}</td>
+
                   <td className="p-3 border border-gray-900">
-                    {contact.fullname}
+                    {subscribe.email}
                   </td>
-                  <td className="p-3 border border-gray-900">
-                    {contact.email}
-                  </td>
-                  <td className="p-3 border border-gray-900">
-                    {contact.subject}
-                  </td>
-                  <td className="p-3 border border-gray-900">
-                    {contact.message}
-                  </td>
+
                   <td className="p-3 border border-gray-900 text-center">
                     <button
-                      onClick={() => deleteBlog(contact._id)}
+                      onClick={() => deleteSubscribe(subscribe._id)}
                       className="btn text-danger p-2 mb-0 btn-sm ml-2 hover:text-red-700"
-                      // onClick={() => deleteBlog(blog._id)}
                     >
                       <AiOutlineDelete size={15} />
                     </button>
@@ -110,4 +98,4 @@ const ContactList = () => {
   );
 };
 
-export default ContactList;
+export default SubscribeList;
